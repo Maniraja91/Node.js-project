@@ -1,0 +1,19 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo "Installing dependencies..."
+      - npm install
+  build:
+    commands:
+      - echo "Building application..."
+  post_build:
+    commands:
+      - echo "Packaging application for Elastic Beanstalk..."
+      - zip -r deploy.zip * .[^.]*  # Create a deployment package
+      - aws s3 cp deploy.zip s3://elasticbeanstalk-artifacts-ap-south-1/deploy.zip
+
+artifacts:
+  files:
+    - deploy.zip
